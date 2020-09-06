@@ -2,7 +2,7 @@ package com.bank.accounts.controller;
 
 import com.bank.accounts.dto.RequestDTO;
 import com.bank.accounts.dto.ResponseDTO;
-import com.bank.accounts.exception.BadRequestException;
+import com.bank.accounts.entity.Account;
 import com.bank.accounts.exception.NotFoundException;
 import com.bank.accounts.repository.AccountsRepository;
 import com.bank.accounts.service.AccountsService;
@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/accounts")
 public class AccountsController {
 
     private AccountsService accountsService;
@@ -26,17 +23,13 @@ public class AccountsController {
 
     @PostMapping("/event")
     public ResponseEntity<ResponseDTO> executeEvent(@RequestBody RequestDTO requestDTO) {
-        this.validateField(requestDTO.getEventType(), "eventType");
-
-        switch (requestDTO.getEventType()){
+        switch (requestDTO.getType()){
             case DEPOSIT:
                 return ResponseEntity.status(HttpStatus.CREATED).body(this.accountsService.deposit(requestDTO));
             case WITHDRAW:
-                this.validateField(requestDTO.getAmount(), "amount");
-                return ResponseEntity.status(HttpStatus.OK).body(this.accountsService.withdraw(requestDTO));
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.accountsService.withdraw(requestDTO));
             case TRANSFER:
-                this.validateField(requestDTO.getAmount(), "amount");
-                return ResponseEntity.status(HttpStatus.OK).body(this.accountsService.transfer(requestDTO));
+                return ResponseEntity.status(HttpStatus.CREATED).body(this.accountsService.transfer(requestDTO));
             default:
                 return null;
         }
@@ -46,18 +39,14 @@ public class AccountsController {
     public ResponseEntity<Double> getBalanace(@RequestParam("account_id") Integer accountId) throws NotFoundException {
         return ResponseEntity.ok(
                 this.accountsRepository.getBalanceById(accountId)
-                        .orElseThrow(() -> new NotFoundException("Account not found"))
+                        .orElseThrow(() -> new NotFoundException("0"))
         );
     }
 
     @PostMapping("/reset")
     public ResponseEntity reset(){
         this.accountsRepository.deleteAll();
-        return ResponseEntity.ok().build();
-    }
-
-    private void validateField(Object field, String fieldName){
-        Optional.ofNullable(field)
-                .orElseThrow(() -> new BadRequestException("Missing fields, verify the field: ", fieldName));
+        this.accountsRepository.save(new Account(300, 0D));
+        return ResponseEntity.ok("OK");
     }
 }

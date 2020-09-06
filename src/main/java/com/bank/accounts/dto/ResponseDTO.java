@@ -1,9 +1,11 @@
 package com.bank.accounts.dto;
 
 import com.bank.accounts.entity.Account;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseDTO {
 
     private Account origin;

@@ -1,6 +1,5 @@
 package com.bank.accounts.aspect;
 
-import com.bank.accounts.exception.BadRequestException;
 import com.bank.accounts.exception.InsuficientFundsException;
 import com.bank.accounts.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,6 @@ public class AccountsControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(NotFoundException notFoundException){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundException.getMessage());
-    }
-
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequestException(BadRequestException badRequestException){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(badRequestException.getMessage().concat(badRequestException.getField()));
     }
 
     @ExceptionHandler(InsuficientFundsException.class)

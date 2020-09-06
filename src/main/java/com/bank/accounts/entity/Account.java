@@ -2,6 +2,7 @@ package com.bank.accounts.entity;
 
 import com.bank.accounts.dto.RequestDTO;
 import com.bank.accounts.exception.InsuficientFundsException;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,11 @@ public class Account {
 
     public Account(RequestDTO requestDTO){
         this.id = requestDTO.getDestination();
+    }
+
+    public Account(int id, Double balance){
+        this.id = id;
+        this.balance = balance;
     }
 
     public void addBalance(Double amount){

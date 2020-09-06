@@ -32,21 +32,21 @@ public class AccountsService {
 
     @Transactional
     public ResponseDTO withdraw(RequestDTO requestDTO) throws InsuficientFundsException {
-        Account destinationAccount =
-                this.findAccountById(requestDTO.getDestination())
-                        .orElseThrow(() -> new NotFoundException("Account not found"));
+        Account originAccount =
+                this.findAccountById(requestDTO.getOrigin())
+                        .orElseThrow(() -> new NotFoundException("0"));
 
-        destinationAccount.withdrawBalance(requestDTO.getAmount());
+        originAccount.withdrawBalance(requestDTO.getAmount());
 
-        return new ResponseDTO(this.accountsRepository.save(destinationAccount));
+        return new ResponseDTO(this.accountsRepository.save(originAccount), null);
     }
 
     @Transactional
     public ResponseDTO transfer(RequestDTO requestDTO) {
         Account originAccount = this.findAccountById(requestDTO.getOrigin())
-                .orElseThrow(() -> new NotFoundException("Origin account not found"));
+                .orElseThrow(() -> new NotFoundException("0"));
         Account destinationAccount = this.findAccountById(requestDTO.getDestination())
-                .orElseThrow(() -> new NotFoundException("Destination account not found"));
+                .orElseThrow(() -> new NotFoundException("0"));
 
         originAccount.withdrawBalance(requestDTO.getAmount());
         destinationAccount.addBalance(requestDTO.getAmount());
