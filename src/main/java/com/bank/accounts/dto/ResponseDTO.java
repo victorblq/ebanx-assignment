@@ -1,11 +1,12 @@
 package com.bank.accounts.dto;
 
 import com.bank.accounts.entity.Account;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.bank.accounts.serializer.ResponseDTOSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize(using = ResponseDTOSerializer.class)
 public class ResponseDTO {
 
     private Account origin;

@@ -46,7 +46,7 @@ public class AccountsController {
     @PostMapping("/reset")
     public ResponseEntity reset(){
         this.accountsRepository.deleteAll();
-        this.accountsRepository.save(new Account(300, 0D));
+        this.accountsRepository.save(new Account(300, 0));
         return ResponseEntity.ok("OK");
     }
 }

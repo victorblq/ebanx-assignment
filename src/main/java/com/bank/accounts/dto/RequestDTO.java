@@ -9,5 +9,5 @@ public class RequestDTO {
     private Event type;
     private Integer origin;
     private Integer destination;
-    private Double amount;
+    private int amount;
 }
